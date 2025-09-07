@@ -90,7 +90,7 @@ export default function Users() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100">
       <Header />
-      <main className="pt-20 sm:pt-24 px-2 sm:px-4 pb-16">
+      <main className="pt-32 sm:pt-24 px-2 sm:px-4 pb-16">
         <div className="max-w-7xl mx-auto">
           <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">

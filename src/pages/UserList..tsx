@@ -90,16 +90,16 @@ export default function Users() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100">
       <Header />
-      <main className="pt-24 px-4 pb-16">
+      <main className="pt-20 sm:pt-24 px-2 sm:px-4 pb-16">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-amber-900">Users List</h2>
-              <div className="relative">
+          <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-amber-900">Users List</h2>
+              <div className="w-full sm:w-auto">
                 <input
                   type="text"
                   placeholder="Search users..."
-                  className="border border-amber-200 rounded-lg px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  className="border border-amber-200 rounded-lg px-4 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-amber-500"
                   onChange={(e) => debouncedSearch(e.target.value)}
                 />
               </div>
@@ -107,7 +107,7 @@ export default function Users() {
 
             <form
               onSubmit={handleSubmit}
-              className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
             >
               <input
                 className="border border-amber-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
@@ -132,7 +132,7 @@ export default function Users() {
               />
               <button
                 type="submit"
-                className="bg-amber-600 text-white rounded-lg px-6 py-2 hover:bg-amber-700 transition-colors duration-200"
+                className="bg-amber-600 text-white rounded-lg px-6 py-2 hover:bg-amber-700 transition-colors duration-200 w-full sm:w-auto"
                 disabled={createMutation.isPending || updateMutation.isPending}
               >
                 {editId !== null ? "Update User" : "Add User"}

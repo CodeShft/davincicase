@@ -88,18 +88,20 @@ export default function Users() {
   }, 300);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100">
+    <div className="min-h-screen bg-black">
       <Header />
       <main className="pt-32 sm:pt-24 px-2 sm:px-4 pb-16">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+          <div className="bg-amber-950/90 rounded-xl shadow-lg p-4 sm:p-6 border border-amber-600/30">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-              <h2 className="text-xl sm:text-2xl font-bold text-amber-900">Users List</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-amber-200">
+                Users List
+              </h2>
               <div className="w-full sm:w-auto">
                 <input
                   type="text"
                   placeholder="Search users..."
-                  className="border border-amber-200 rounded-lg px-4 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  className="border border-amber-500/50 bg-amber-900/50 text-amber-100 placeholder-amber-400/70 rounded-lg px-4 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-amber-500"
                   onChange={(e) => debouncedSearch(e.target.value)}
                 />
               </div>
@@ -110,21 +112,21 @@ export default function Users() {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
             >
               <input
-                className="border border-amber-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="border border-amber-500/50 bg-amber-900/50 text-amber-100 placeholder-amber-400/70 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
                 placeholder="Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
               />
               <input
-                className="border border-amber-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="border border-amber-500/50 bg-amber-900/50 text-amber-100 placeholder-amber-400/70 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
               />
               <input
-                className="border border-amber-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="border border-amber-500/50 bg-amber-900/50 text-amber-100 placeholder-amber-400/70 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -132,7 +134,7 @@ export default function Users() {
               />
               <button
                 type="submit"
-                className="bg-amber-600 text-white rounded-lg px-6 py-2 hover:bg-amber-700 transition-colors duration-200 w-full sm:w-auto"
+                className="bg-red-700 text-amber-100 rounded-lg px-6 py-2 hover:bg-red-600 transition-colors duration-200 w-full sm:w-auto border border-red-500/30"
                 disabled={createMutation.isPending || updateMutation.isPending}
               >
                 {editId !== null ? "Update User" : "Add User"}
@@ -145,39 +147,39 @@ export default function Users() {
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-amber-200">
+                <table className="min-w-full divide-y divide-amber-500/30">
                   <thead>
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-700 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
                         ID
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-700 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
                         Name
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-700 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
                         Username
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-700 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
                         Email
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-700 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-amber-200">
+                  <tbody className="divide-y divide-amber-500/30">
                     {filteredUsers.map((user) => (
-                      <tr key={user.id} className="hover:bg-amber-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <tr key={user.id} className="hover:bg-amber-800/50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-amber-100">
                           {user.id}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-amber-100">
                           {user.name}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-amber-100">
                           {user.username}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-amber-100">
                           {user.email}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">

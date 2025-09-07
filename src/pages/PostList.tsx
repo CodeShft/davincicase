@@ -96,18 +96,20 @@ export default function Posts() {
   const filteredPosts = filterPosts(posts, searchTerm, selectedUserId);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100">
+    <div className="min-h-screen bg-black">
       <Header />
       <main className="pt-32 sm:pt-24 px-2 sm:px-4 pb-16">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+          <div className="bg-amber-950/90 rounded-xl shadow-lg p-4 sm:p-6 border border-amber-600/30">
             <div className="space-y-4 sm:space-y-6 mb-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h2 className="text-xl sm:text-2xl font-bold text-amber-900">Posts List</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-amber-200">
+                  Posts List
+                </h2>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 w-full">
                 <select
-                  className="border border-amber-200 rounded-lg px-4 py-2 w-full sm:w-48 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  className="border border-amber-500/50 bg-amber-900/50 text-amber-100 rounded-lg px-4 py-2 w-full sm:w-48 focus:outline-none focus:ring-2 focus:ring-amber-500"
                   value={selectedUserId || ""}
                   onChange={(e) =>
                     setSelectedUserId(
@@ -125,7 +127,7 @@ export default function Posts() {
                 <input
                   type="text"
                   placeholder="Search posts..."
-                  className="border border-amber-200 rounded-lg px-4 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  className="border border-amber-500/50 bg-amber-900/50 text-amber-100 placeholder-amber-400/70 rounded-lg px-4 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-amber-500"
                   onChange={(e) => debouncedSearch(e.target.value)}
                 />
               </div>
@@ -136,7 +138,7 @@ export default function Posts() {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"
             >
               <select
-                className="border border-amber-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="border border-amber-500/50 bg-amber-900/50 text-amber-100 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
                 value={userId}
                 onChange={(e) => setUserId(Number(e.target.value))}
                 required
@@ -149,7 +151,7 @@ export default function Posts() {
                 ))}
               </select>
               <input
-                className="border border-amber-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="border border-amber-500/50 bg-amber-900/50 text-amber-100 placeholder-amber-400/70 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
                 placeholder="Post Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -157,7 +159,7 @@ export default function Posts() {
               />
               <button
                 type="submit"
-                className="bg-amber-600 text-white rounded-lg px-6 py-2 hover:bg-amber-700 transition-colors duration-200 w-full sm:w-auto"
+                className="bg-red-700 text-amber-100 rounded-lg px-6 py-2 hover:bg-red-600 transition-colors duration-200 w-full sm:w-auto border border-red-500/30"
                 disabled={createMutation.isPending || updateMutation.isPending}
               >
                 {editId !== null ? "Update Post" : "Add Post"}
@@ -170,35 +172,35 @@ export default function Posts() {
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-amber-200">
+                <table className="min-w-full divide-y divide-amber-500/30">
                   <thead>
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-700 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
                         ID
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-700 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
                         Title
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-700 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
                         Author
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-700 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-amber-200">
+                  <tbody className="divide-y divide-amber-500/30">
                     {filteredPosts.map((post) => (
-                      <tr key={post.id} className="hover:bg-amber-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <tr key={post.id} className="hover:bg-amber-800/50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-amber-100">
                           {post.id}
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-900">
+                        <td className="px-6 py-4 text-sm text-amber-100">
                           {post.title}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-amber-100">
                           {getUserName(post.userId)}
-                          <span className="ml-2 text-xs text-gray-500">
+                          <span className="ml-2 text-xs text-amber-400/70">
                             (ID: {post.userId})
                           </span>
                         </td>

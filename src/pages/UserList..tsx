@@ -39,9 +39,20 @@ export default function Users() {
 
   const deleteMutation = useMutation({
     mutationFn: api.users.delete,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+    onMutate: async (userId) => {
+      await queryClient.cancelQueries({ queryKey: ["users"] });
+      const previousUsers = queryClient.getQueryData<User[]>(["users"]);
+      queryClient.setQueryData<User[]>(["users"], (old = []) => 
+        old.filter((user) => user.id !== userId)
+      );
+      return { previousUsers };
     },
+    onError: (err, variables, context) => {
+      if (context?.previousUsers) {
+        queryClient.setQueryData(["users"], context.previousUsers);
+      }
+    },
+    // Remove onSettled to prevent refetch
   });
 
   const filteredUsers = filterUsers(users, searchTerm);

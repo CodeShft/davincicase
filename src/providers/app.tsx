@@ -4,10 +4,12 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5,
-      gcTime: 1000 * 60 * 30,
+      staleTime: Infinity, // Data never goes stale
+      gcTime: 1000 * 60 * 60 * 24, // Cache for 24 hours
       retry: 1,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
     },
   },
 });

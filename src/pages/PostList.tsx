@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Header from "../components/Header";
 import { api } from "../services/api";
-import type { Post, User } from "../services/api";
+import type { Post } from "../services/api";
 import { useFiltersStore, filterPosts } from "../store/filters";
 import debounce from "lodash/debounce";
 
@@ -45,17 +45,16 @@ export default function Posts() {
     onMutate: async (postId) => {
       await queryClient.cancelQueries({ queryKey: ["posts"] });
       const previousPosts = queryClient.getQueryData<Post[]>(["posts"]);
-      queryClient.setQueryData<Post[]>(["posts"], (old = []) => 
+      queryClient.setQueryData<Post[]>(["posts"], (old = []) =>
         old.filter((post) => post.id !== postId)
       );
       return { previousPosts };
     },
-    onError: (err, variables, context) => {
+    onError: (_err, _variables, context) => {
       if (context?.previousPosts) {
         queryClient.setQueryData(["posts"], context.previousPosts);
       }
     },
-    // Remove onSettled to prevent refetch
   });
 
   const isLoading = isLoadingPosts || isLoadingUsers;

@@ -42,17 +42,16 @@ export default function Users() {
     onMutate: async (userId) => {
       await queryClient.cancelQueries({ queryKey: ["users"] });
       const previousUsers = queryClient.getQueryData<User[]>(["users"]);
-      queryClient.setQueryData<User[]>(["users"], (old = []) => 
+      queryClient.setQueryData<User[]>(["users"], (old = []) =>
         old.filter((user) => user.id !== userId)
       );
       return { previousUsers };
     },
-    onError: (err, variables, context) => {
+    onError: (_err, _variables, context) => {
       if (context?.previousUsers) {
         queryClient.setQueryData(["users"], context.previousUsers);
       }
     },
-    // Remove onSettled to prevent refetch
   });
 
   const filteredUsers = filterUsers(users, searchTerm);

@@ -46,12 +46,10 @@ export const useFiltersStore = create<FiltersState>((set) => ({
 }));
 
 export const filterUsers = (users: User[], searchTerm: string): User[] => {
-  const lowerSearchTerm = searchTerm.toLowerCase();
+  if (!searchTerm) return users;
+  const searchChar = searchTerm.toLowerCase()[0];
   return users.filter(
-    (user) =>
-      user.name.toLowerCase().includes(lowerSearchTerm) ||
-      user.username.toLowerCase().includes(lowerSearchTerm) ||
-      user.email.toLowerCase().includes(lowerSearchTerm)
+    (user) => user.name.toLowerCase()[0] === searchChar
   );
 };
 

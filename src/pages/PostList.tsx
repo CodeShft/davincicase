@@ -120,7 +120,11 @@ export default function Posts() {
                 >
                   <option value="">All Users</option>
                   {users.map((user) => (
-                    <option key={user.id} value={user.id} className="bg-amber-950">
+                    <option
+                      key={user.id}
+                      value={user.id}
+                      className="bg-amber-950"
+                    >
                       {user.name}
                     </option>
                   ))}
@@ -147,7 +151,11 @@ export default function Posts() {
               >
                 <option value="">Select User</option>
                 {users.map((user) => (
-                  <option key={user.id} value={user.id} className="bg-amber-950">
+                  <option
+                    key={user.id}
+                    value={user.id}
+                    className="bg-amber-950"
+                  >
                     {user.name}
                   </option>
                 ))}
@@ -208,7 +216,7 @@ export default function Posts() {
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap text-sm font-medium">
                           <div className="flex gap-2">
-                                            <button
+                            <button
                               onClick={() => handleEdit(post)}
                               className="px-2 py-0.5 bg-amber-600/20 text-amber-400 rounded hover:bg-amber-600/30 transition-colors duration-200 text-[11px]"
                               disabled={deleteMutation.isPending}

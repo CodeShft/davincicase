@@ -39,15 +39,19 @@ export default function Users() {
 
   const deleteMutation = useMutation({
     mutationFn: api.users.delete,
-    onMutate: async (userId) => {
+    onMutate: async (userId: number) => {
       await queryClient.cancelQueries({ queryKey: ["users"] });
       const previousUsers = queryClient.getQueryData<User[]>(["users"]);
-      queryClient.setQueryData<User[]>(["users"], (old = []) =>
+      queryClient.setQueryData<User[]>(["users"], (old: User[] = []) =>
         old.filter((user) => user.id !== userId)
       );
       return { previousUsers };
     },
-    onError: (_err, _variables, context) => {
+    onError: (
+      _err: unknown,
+      _variables: unknown,
+      context: { previousUsers: User[] | undefined } | undefined
+    ) => {
       if (context?.previousUsers) {
         queryClient.setQueryData(["users"], context.previousUsers);
       }
@@ -101,7 +105,7 @@ export default function Users() {
                 <input
                   type="text"
                   placeholder="Search users..."
-                  className="border border-white/10 bg-white/5 text-white placeholder-white/50 rounded-lg px-4 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-white/20"
+                  className="border border-amber-500/30 bg-amber-900/30 text-amber-100 placeholder-amber-400/70 rounded-lg px-4 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-amber-500 focus-visible:ring-amber-500"
                   onChange={(e) => debouncedSearch(e.target.value)}
                 />
               </div>
@@ -109,24 +113,24 @@ export default function Users() {
 
             <form
               onSubmit={handleSubmit}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 px-4 sm:px-0"
             >
               <input
-                className="border border-white/10 bg-white/5 text-white placeholder-white/50 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 h-10"
+                className="border border-amber-500/30 bg-amber-900/30 text-amber-100 placeholder-amber-400/70 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500 focus-visible:ring-amber-500 h-10"
                 placeholder="Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
               />
               <input
-                className="border border-white/10 bg-white/5 text-white placeholder-white/50 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 h-10"
+                className="border border-amber-500/30 bg-amber-900/30 text-amber-100 placeholder-amber-400/70 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500 focus-visible:ring-amber-500 h-10"
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
               />
               <input
-                className="border border-white/10 bg-white/5 text-white placeholder-white/50 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 h-10"
+                className="border border-amber-500/30 bg-amber-900/30 text-amber-100 placeholder-amber-400/70 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500 focus-visible:ring-amber-500 h-10"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -134,7 +138,7 @@ export default function Users() {
               />
               <button
                 type="submit"
-                className="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg h-10 px-6 hover:from-amber-600 hover:to-amber-700 transition-all duration-200 w-64 sm:w-auto shadow-lg shadow-amber-500/20 font-medium text-sm focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50"
+                className="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg h-10 px-6 hover:from-amber-600 hover:to-amber-700 transition-all duration-200 w-full sm:w-auto shadow-lg shadow-amber-500/20 font-medium text-sm focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50"
                 disabled={createMutation.isPending || updateMutation.isPending}
               >
                 {editId !== null ? "Update User" : "Add User"}
@@ -168,7 +172,7 @@ export default function Users() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-amber-500/30">
-                    {filteredUsers.map((user) => (
+                    {filteredUsers.map((user: User) => (
                       <tr key={user.id} className="hover:bg-amber-800/50">
                         <td className="px-4 py-2 whitespace-nowrap text-sm text-amber-100">
                           {user.id}
@@ -184,7 +188,7 @@ export default function Users() {
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap text-sm font-medium">
                           <div className="flex gap-2">
-                                            <button
+                            <button
                               onClick={() => handleEdit(user)}
                               className="px-2 py-0.5 bg-amber-600/20 text-amber-400 rounded hover:bg-amber-600/30 transition-colors duration-200 text-[11px]"
                               disabled={deleteMutation.isPending}

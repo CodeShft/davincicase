@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Navbar from "../components/Navbar";
 import { api } from "../services/api";
-import type { Post } from "../services/api";
+import type { Post, User } from "../services/api";
 import { useFiltersStore, filterPosts } from "../store/filters";
 import debounce from "lodash/debounce";
 
@@ -42,15 +42,19 @@ export default function Posts() {
 
   const deleteMutation = useMutation({
     mutationFn: api.posts.delete,
-    onMutate: async (postId) => {
+    onMutate: async (postId: number) => {
       await queryClient.cancelQueries({ queryKey: ["posts"] });
       const previousPosts = queryClient.getQueryData<Post[]>(["posts"]);
-      queryClient.setQueryData<Post[]>(["posts"], (old = []) =>
+      queryClient.setQueryData<Post[]>(["posts"], (old: Post[] = []) =>
         old.filter((post) => post.id !== postId)
       );
       return { previousPosts };
     },
-    onError: (_err, _variables, context) => {
+    onError: (
+      _err: unknown,
+      _variables: number,
+      context: { previousPosts: Post[] | undefined } | undefined
+    ) => {
       if (context?.previousPosts) {
         queryClient.setQueryData(["posts"], context.previousPosts);
       }
@@ -60,7 +64,7 @@ export default function Posts() {
   const isLoading = isLoadingPosts || isLoadingUsers;
 
   const getUserName = (userId: number) => {
-    const user = users.find((u) => u.id === userId);
+    const user = users.find((u: User) => u.id === userId);
     return user ? user.name : "Unknown User";
   };
 
@@ -119,7 +123,7 @@ export default function Posts() {
                   }
                 >
                   <option value="">All Users</option>
-                  {users.map((user) => (
+                  {users.map((user: User) => (
                     <option
                       key={user.id}
                       value={user.id}
@@ -140,7 +144,7 @@ export default function Posts() {
 
             <form
               onSubmit={handleSubmit}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 px-4 sm:px-0"
             >
               <select
                 className="border border-amber-500/30 bg-amber-900/30 text-amber-100 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500 focus-visible:ring-amber-500 h-10 outline-none w-48 sm:w-full"
@@ -150,7 +154,7 @@ export default function Posts() {
                 required
               >
                 <option value="">Select User</option>
-                {users.map((user) => (
+                {users.map((user: User) => (
                   <option
                     key={user.id}
                     value={user.id}
@@ -169,7 +173,7 @@ export default function Posts() {
               />
               <button
                 type="submit"
-                className="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg h-10 px-6 hover:from-amber-600 hover:to-amber-700 transition-all duration-200 w-64 sm:w-auto shadow-lg shadow-amber-500/20 font-medium text-sm focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50"
+                className="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg h-10 px-6 hover:from-amber-600 hover:to-amber-700 transition-all duration-200 w-full sm:w-auto shadow-lg shadow-amber-500/20 font-medium text-sm focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50"
                 disabled={createMutation.isPending || updateMutation.isPending}
               >
                 {editId !== null ? "Update Post" : "Add Post"}

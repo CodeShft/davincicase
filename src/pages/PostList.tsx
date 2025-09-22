@@ -12,8 +12,9 @@ export default function Posts() {
   const [userId, setUserId] = useState<number>(1);
   const [editId, setEditId] = useState<number | null>(null);
 
-  // Arama için ortak filtre
-  const { searchTerm, setSearchTerm } = useFiltersStore((state) => state.postFilters);
+  const { searchTerm, setSearchTerm } = useFiltersStore(
+    (state) => state.postFilters
+  );
 
   const { data: posts = [], isLoading: isLoadingPosts } = useQuery({
     queryKey: ["posts"],
@@ -97,7 +98,6 @@ export default function Posts() {
     setSearchTerm(value);
   }, 300);
 
-  // Hem kullanıcı hem postları birleştirip filtrele
   const combinedResults = filterCombined(users, posts, searchTerm);
 
   return (
@@ -169,17 +169,32 @@ export default function Posts() {
                 <table className="min-w-full divide-y divide-amber-500/30 bg-amber-950/90">
                   <thead>
                     <tr>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Type</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">ID</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Title / Name</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Author / Username</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Email</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Actions</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
+                        Type
+                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
+                        ID
+                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
+                        Title / Name
+                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
+                        Author / Username
+                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
+                        Email
+                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
+                        Actions
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-amber-500/30">
                     {combinedResults.map((item) => (
-                      <tr key={item.type + '-' + item.id} className="hover:bg-amber-800/50">
+                      <tr
+                        key={item.type + "-" + item.id}
+                        className="hover:bg-amber-800/50"
+                      >
                         <td className="px-4 py-2 whitespace-nowrap text-sm text-amber-100">
                           {item.type === "user" ? "User" : "Post"}
                         </td>
@@ -190,7 +205,9 @@ export default function Posts() {
                           {item.type === "user" ? item.name : item.title}
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap text-sm text-amber-100">
-                          {item.type === "user" ? item.username : getUserName(item.userId)}
+                          {item.type === "user"
+                            ? item.username
+                            : getUserName(item.userId)}
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap text-sm text-amber-100">
                           {"email" in item ? item.email : "-"}

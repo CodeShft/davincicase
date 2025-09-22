@@ -45,13 +45,10 @@ export const useFiltersStore = create<FiltersState>((set) => ({
   },
 }));
 
-
 export const filterUsers = (users: User[], searchTerm: string): User[] => {
   if (!searchTerm) return users;
   const searchChar = searchTerm.toLowerCase()[0];
-  return users.filter(
-    (user) => user.name.toLowerCase()[0] === searchChar
-  );
+  return users.filter((user) => user.name.toLowerCase()[0] === searchChar);
 };
 
 export const filterPosts = (
@@ -77,7 +74,6 @@ export const filterPosts = (
   return filteredPosts;
 };
 
-// Kullanıcı ve postları birlikte filtreleyen fonksiyon
 export type CombinedItem =
   | ({ type: "user" } & User)
   | ({ type: "post" } & Post);
@@ -89,7 +85,6 @@ export const filterCombined = (
 ): CombinedItem[] => {
   const lowerSearchTerm = searchTerm.toLowerCase();
 
-  // Arama kutusu boşsa tüm kullanıcı ve postları göster
   if (!lowerSearchTerm) {
     const allUsers = users.map((user) => ({ ...user, type: "user" as const }));
     const allPosts = posts.map((post) => {
@@ -97,13 +92,12 @@ export const filterCombined = (
       return {
         ...post,
         type: "post" as const,
-        email: user?.email || "-"
+        email: user?.email || "-",
       };
     });
     return [...allUsers, ...allPosts];
   }
 
-  // Arama varsa baş harfe göre filtrele
   const filteredUsers = users
     .filter((user) => user.name.toLowerCase().startsWith(lowerSearchTerm[0]))
     .map((user) => ({ ...user, type: "user" as const }));
@@ -119,7 +113,7 @@ export const filterCombined = (
       return {
         ...post,
         type: "post" as const,
-        email: user?.email || "-"
+        email: user?.email || "-",
       };
     });
 

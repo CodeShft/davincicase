@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Navbar from "../components/Navbar";
 import { api } from "../services/api";
 import type { Post, User } from "../services/api";
-import { useFiltersStore, filterPosts } from "../store/filters";
+import { useFiltersStore, filterCombined } from "../store/filters";
 import debounce from "lodash/debounce";
 
 export default function Posts() {
@@ -12,8 +12,8 @@ export default function Posts() {
   const [userId, setUserId] = useState<number>(1);
   const [editId, setEditId] = useState<number | null>(null);
 
-  const { searchTerm, selectedUserId, setSearchTerm, setSelectedUserId } =
-    useFiltersStore((state) => state.postFilters);
+  // Arama için ortak filtre
+  const { searchTerm, setSearchTerm } = useFiltersStore((state) => state.postFilters);
 
   const { data: posts = [], isLoading: isLoadingPosts } = useQuery({
     queryKey: ["posts"],
@@ -97,7 +97,8 @@ export default function Posts() {
     setSearchTerm(value);
   }, 300);
 
-  const filteredPosts = filterPosts(posts, searchTerm, selectedUserId);
+  // Hem kullanıcı hem postları birleştirip filtrele
+  const combinedResults = filterCombined(users, posts, searchTerm);
 
   return (
     <div className="min-h-screen bg-black">
@@ -108,34 +109,13 @@ export default function Posts() {
             <div className="space-y-4 sm:space-y-6 mb-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <h2 className="text-xl sm:text-2xl font-bold text-amber-200">
-                  Posts List
+                  Posts & Users Search
                 </h2>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 w-full">
-                <select
-                  className="border border-amber-500/30 bg-amber-900/30 text-amber-100 rounded-lg px-4 py-2 w-48 sm:w-48 focus:outline-none focus:ring-2 focus:ring-amber-500 focus-visible:ring-amber-500 outline-none"
-                  style={{ WebkitAppearance: "none", MozAppearance: "none" }}
-                  value={selectedUserId || ""}
-                  onChange={(e) =>
-                    setSelectedUserId(
-                      e.target.value ? Number(e.target.value) : null
-                    )
-                  }
-                >
-                  <option value="">All Users</option>
-                  {users.map((user: User) => (
-                    <option
-                      key={user.id}
-                      value={user.id}
-                      className="bg-amber-950"
-                    >
-                      {user.name}
-                    </option>
-                  ))}
-                </select>
                 <input
                   type="text"
-                  placeholder="Search posts..."
+                  placeholder="Search posts or users..."
                   className="border border-amber-500/30 bg-amber-900/30 text-amber-100 placeholder-amber-400/70 rounded-lg px-4 py-2 w-48 sm:w-64 focus:outline-none focus:ring-2 focus:ring-amber-500 focus-visible:ring-amber-500"
                   onChange={(e) => debouncedSearch(e.target.value)}
                 />
@@ -189,51 +169,52 @@ export default function Posts() {
                 <table className="min-w-full divide-y divide-amber-500/30 bg-amber-950/90">
                   <thead>
                     <tr>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
-                        ID
-                      </th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
-                        Title
-                      </th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
-                        Author
-                      </th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
-                        Actions
-                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Type</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">ID</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Title / Name</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Author / Username</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Email</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-amber-500/30">
-                    {filteredPosts.map((post) => (
-                      <tr key={post.id} className="hover:bg-amber-800/50">
+                    {combinedResults.map((item) => (
+                      <tr key={item.type + '-' + item.id} className="hover:bg-amber-800/50">
                         <td className="px-4 py-2 whitespace-nowrap text-sm text-amber-100">
-                          {post.id}
+                          {item.type === "user" ? "User" : "Post"}
+                        </td>
+                        <td className="px-4 py-2 whitespace-nowrap text-sm text-amber-100">
+                          {item.id}
                         </td>
                         <td className="px-4 py-2 text-sm text-amber-100">
-                          {post.title}
+                          {item.type === "user" ? item.name : item.title}
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap text-sm text-amber-100">
-                          {getUserName(post.userId)}
-                          <span className="ml-2 text-xs text-amber-400/70">
-                            (ID: {post.userId})
-                          </span>
+                          {item.type === "user" ? item.username : getUserName(item.userId)}
+                        </td>
+                        <td className="px-4 py-2 whitespace-nowrap text-sm text-amber-100">
+                          {"email" in item ? item.email : "-"}
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap text-sm font-medium">
                           <div className="flex gap-2">
-                            <button
-                              onClick={() => handleEdit(post)}
-                              className="px-2 py-0.5 bg-amber-600/20 text-amber-400 rounded hover:bg-amber-600/30 transition-colors duration-200 text-[11px]"
-                              disabled={deleteMutation.isPending}
-                            >
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => handleDelete(post.id)}
-                              className="px-2 py-0.5 bg-red-600/20 text-red-400 rounded hover:bg-red-600/30 transition-colors duration-200 text-[11px]"
-                              disabled={deleteMutation.isPending}
-                            >
-                              Delete
-                            </button>
+                            {item.type === "post" ? (
+                              <>
+                                <button
+                                  onClick={() => handleEdit(item)}
+                                  className="px-2 py-0.5 bg-amber-600/20 text-amber-400 rounded hover:bg-amber-600/30 transition-colors duration-200 text-[11px]"
+                                  disabled={deleteMutation.isPending}
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  onClick={() => handleDelete(item.id)}
+                                  className="px-2 py-0.5 bg-red-600/20 text-red-400 rounded hover:bg-red-600/30 transition-colors duration-200 text-[11px]"
+                                  disabled={deleteMutation.isPending}
+                                >
+                                  Delete
+                                </button>
+                              </>
+                            ) : null}
                           </div>
                         </td>
                       </tr>

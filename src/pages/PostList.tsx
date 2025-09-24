@@ -98,7 +98,9 @@ export default function Posts() {
     setSearchTerm(value);
   }, 300);
 
-  const combinedResults = filterCombined(users, posts, searchTerm);
+  const combinedResults = filterCombined(users, posts, searchTerm).filter(
+    (item) => item.type === "post"
+  );
 
   return (
     <div className="min-h-screen bg-black">
@@ -170,9 +172,6 @@ export default function Posts() {
                   <thead>
                     <tr>
                       <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
-                        Type
-                      </th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
                         ID
                       </th>
                       <th className="px-4 py-2 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">
@@ -196,42 +195,33 @@ export default function Posts() {
                         className="hover:bg-amber-800/50"
                       >
                         <td className="px-4 py-2 whitespace-nowrap text-sm text-amber-100">
-                          {item.type === "user" ? "User" : "Post"}
-                        </td>
-                        <td className="px-4 py-2 whitespace-nowrap text-sm text-amber-100">
                           {item.id}
                         </td>
                         <td className="px-4 py-2 text-sm text-amber-100">
-                          {item.type === "user" ? item.name : item.title}
+                          {item.title}
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap text-sm text-amber-100">
-                          {item.type === "user"
-                            ? item.username
-                            : getUserName(item.userId)}
+                          {getUserName(item.userId)}
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap text-sm text-amber-100">
-                          {"email" in item ? item.email : "-"}
+                          {(item as any).email || "-"}
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap text-sm font-medium">
                           <div className="flex gap-2">
-                            {item.type === "post" ? (
-                              <>
-                                <button
-                                  onClick={() => handleEdit(item)}
-                                  className="px-2 py-0.5 bg-amber-600/20 text-amber-400 rounded hover:bg-amber-600/30 transition-colors duration-200 text-[11px]"
-                                  disabled={deleteMutation.isPending}
-                                >
-                                  Edit
-                                </button>
-                                <button
-                                  onClick={() => handleDelete(item.id)}
-                                  className="px-2 py-0.5 bg-red-600/20 text-red-400 rounded hover:bg-red-600/30 transition-colors duration-200 text-[11px]"
-                                  disabled={deleteMutation.isPending}
-                                >
-                                  Delete
-                                </button>
-                              </>
-                            ) : null}
+                            <button
+                              onClick={() => handleEdit(item)}
+                              className="px-2 py-0.5 bg-amber-600/20 text-amber-400 rounded hover:bg-amber-600/30 transition-colors duration-200 text-[11px]"
+                              disabled={deleteMutation.isPending}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDelete(item.id)}
+                              className="px-2 py-0.5 bg-red-600/20 text-red-400 rounded hover:bg-red-600/30 transition-colors duration-200 text-[11px]"
+                              disabled={deleteMutation.isPending}
+                            >
+                              Delete
+                            </button>
                           </div>
                         </td>
                       </tr>

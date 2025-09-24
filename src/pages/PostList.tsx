@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Navbar from "../components/Navbar";
 import { api } from "../services/api";
 import type { Post, User } from "../services/api";
-import { useFiltersStore, filterCombined } from "../store/filters";
+import { useFiltersStore } from "../store/filters";
 import debounce from "lodash/debounce";
 
 export default function Posts() {
@@ -64,11 +64,6 @@ export default function Posts() {
 
   const isLoading = isLoadingPosts || isLoadingUsers;
 
-  const getUserName = (userId: number) => {
-    const user = users.find((u: User) => u.id === userId);
-    return user ? user.name : "Unknown User";
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (editId !== null) {
@@ -98,9 +93,21 @@ export default function Posts() {
     setSearchTerm(value);
   }, 300);
 
-  const combinedResults = filterCombined(users, posts, searchTerm).filter(
-    (item) => item.type === "post"
-  );
+  const lowerSearch = searchTerm.toLowerCase();
+  const filteredPosts = posts.filter((post) => {
+    const user = users.find((u) => u.id === post.userId);
+    if (!user || !user.username) return false;
+    if (!lowerSearch) return true;
+    return user.username.toLowerCase().startsWith(lowerSearch[0]);
+  });
+
+  const combinedResults = filteredPosts.map((post) => {
+    const user = users.find((u) => u.id === post.userId);
+    return {
+      ...post,
+      email: user?.email || "-",
+    };
+  });
 
   return (
     <div className="min-h-screen bg-black">
@@ -190,10 +197,7 @@ export default function Posts() {
                   </thead>
                   <tbody className="divide-y divide-amber-500/30">
                     {combinedResults.map((item) => (
-                      <tr
-                        key={item.type + "-" + item.id}
-                        className="hover:bg-amber-800/50"
-                      >
+                      <tr key={item.id} className="hover:bg-amber-800/50">
                         <td className="px-4 py-2 whitespace-nowrap text-sm text-amber-100">
                           {item.id}
                         </td>
@@ -201,7 +205,12 @@ export default function Posts() {
                           {item.title}
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap text-sm text-amber-100">
-                          {getUserName(item.userId)}
+                          {(() => {
+                            const user = users.find(
+                              (u) => u.id === item.userId
+                            );
+                            return user ? user.username : "-";
+                          })()}
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap text-sm text-amber-100">
                           {(item as any).email || "-"}

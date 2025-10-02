@@ -1,11 +1,11 @@
-# DavinciCase
+# TestCase
 
 You can access the project here: https://dvcase.netlify.app/
 
 ## Project Description
 
 This project was built using Vite as the development environment for fast and efficient setup, together with React to create a reusable component-based UI. Data is fetched and managed from the JSONPlaceholder API
- using React Query, while React Router DOM is used to enable smooth navigation between pages such as Homepage, Users, and Posts.
+using React Query, while React Router DOM is used to enable smooth navigation between pages such as Homepage, Users, and Posts.
 
 For the UI, TailwindCSS was applied to achieve a modern and responsive design, supported by PostCSS and Autoprefixer for cross-browser compatibility. Global and filter state management is handled with Zustand, and Lodash utilities were included to simplify complex operations and improve code readability.
 

@@ -6,16 +6,17 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row justify-between items-center py-3 sm:py-4 gap-3 sm:gap-0">
           <div className="flex items-center gap-3 sm:gap-4">
-            <Link to="/">
+            <Link to="/" className="flex items-center gap-3">
               <img
-                src="https://davinciboardgame.com/wp-content/uploads/2023/01/Hy8uge6SCowHNV4QUwQ1_abBLok08iS03jz2W.png"
-                alt="Da Vinci Board Game Logo"
-                className="h-10 sm:h-12 w-auto brightness-125"
+                src="https://i.pinimg.com/564x/50/18/23/501823890cf2be28743ac4861742d294.jpg"
+                alt="Test Game Logo"
+                className="h-16 sm:h-20 w-auto rounded-full shadow-lg border-4 border-amber-400 bg-black p-1"
+                style={{ maxWidth: 80 }}
               />
+              <span className="text-2xl sm:text-3xl font-bold text-amber-300 align-middle">
+                Test Game
+              </span>
             </Link>
-            <h1 className="text-lg sm:text-xl font-bold text-amber-300">
-              Da Vinci Board Game
-            </h1>
           </div>
 
           <nav className="flex gap-4 sm:gap-6 pb-2 sm:pb-0">

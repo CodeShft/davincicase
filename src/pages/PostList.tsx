@@ -118,7 +118,7 @@ export default function Posts() {
             <div className="space-y-4 sm:space-y-6 mb-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <h2 className="text-xl sm:text-2xl font-bold text-amber-200">
-                  Posts & Users Search
+                  Test Game
                 </h2>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 w-full">

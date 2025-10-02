@@ -11,12 +11,13 @@ export default function Navbar() {
               className="flex items-center gap-3 hover:opacity-80 transition-opacity"
             >
               <img
-                src="https://davinciboardgame.com/wp-content/uploads/2023/01/Hy8uge6SCowHNV4QUwQ1_abBLok08iS03jz2W.png"
-                alt="Da Vinci Board Game Logo"
-                className="h-8 sm:h-10 w-auto brightness-125"
+                src="https://i.pinimg.com/564x/50/18/23/501823890cf2be28743ac4861742d294.jpg"
+                alt="Test Game Logo"
+                className="h-10 sm:h-12 w-auto rounded-full shadow-lg border-4 border-amber-400 bg-black p-1"
+                style={{ maxWidth: 48 }}
               />
-              <h1 className="text-sm sm:text-lg lg:text-xl font-bold text-amber-300 truncate">
-                Da Vinci Board Game
+              <h1 className="text-lg sm:text-xl font-bold text-amber-300 truncate">
+                Test Game
               </h1>
             </Link>
           </div>

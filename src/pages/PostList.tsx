@@ -113,12 +113,12 @@ export default function Posts() {
     <div className="min-h-screen bg-black">
       <Navbar />
       <main className="fixed top-20 bottom-0 left-0 right-0 overflow-y-auto px-2 sm:px-4">
-        <div className="max-w-7xl mx-auto py-6">
-          <div className="bg-amber-950/90 rounded-xl shadow-lg p-4 sm:p-6 border border-amber-600/30">
+        <div className="max-w-7xl mx-auto py-6 mt-8 sm:mt-0">
+          <div className="bg-amber-950/90 rounded-xl shadow-lg p-4 sm:p-6 border border-amber-600/30 mb-6 sm:mb-0">
             <div className="space-y-4 sm:space-y-6 mb-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <h2 className="text-xl sm:text-2xl font-bold text-amber-200">
-                  Test Game
+                  Post List
                 </h2>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 w-full">
